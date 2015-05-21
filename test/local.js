@@ -14,5 +14,5 @@ var context = {
   }
 }
 var event = require('./payload')
-var handler = require('./').handler
+var handler = require('../').handler
 handler(event, context)
