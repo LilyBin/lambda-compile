@@ -16,6 +16,5 @@ expandargs='"$@"'
 cp ly/usr/bin/gs ly/usr/bin/gs.orig
 cat <<EOF >ly/usr/bin/gs
 #!/bin/sh
-echo "This is a wrapper"
 gs.orig -dNOFONTMAP $expandargs
 EOF
