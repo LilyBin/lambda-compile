@@ -3,6 +3,7 @@ console.time('init')
 var AWS = require('aws-sdk')
 var Promise = require('bluebird')
 var exec = require('./lib/exec')
+var config = require('./config')
 var fs = Promise.promisifyAll(require('fs'))
 var s3 = Promise.promisifyAll(new AWS.S3())
 const BUCKET = 'lilypad-test'
@@ -32,7 +33,7 @@ exports.handler = function(event, context) {
   makeTime('init', 'installation')
 
   return Promise.join(
-    exec('sh ' + __dirname + '/install-lilypond.sh')
+    exec('sh ' + __dirname + '/install-lilypond.sh ' + config.version)
   , fs.writeFileAsync('input.ly', event.body)
   ).bind({
     key : event.key
