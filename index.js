@@ -43,7 +43,7 @@ exports.handler = function(event, context) {
   }).then(makeTime.bind(null, 'installation', 'lilypond'))
   .then(exec.bind(
     null,
-    'lilypond ' + cliOptions + ' -o rendered input.ly'
+    'lilypond ' + cli + ' -o rendered input.ly'
   ))
   .then(function (res) {
     result = res
