@@ -1,9 +1,9 @@
 #!/bin/sh
-# $0 <version>
 
 set -e
 
-version=$1
+DIR=$(dirname `readlink -f "$0"`)
+version="`cat $DIR/version`"
 
 if test -d ly; then exit; fi
 
