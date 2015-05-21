@@ -61,7 +61,7 @@ function makeTime (end, begin) {
   console.time(begin)
 }
 
-function uploadFile (key, mode, file) {
+function uploadFile (key, file) {
   return fs.readFileAsync(file)
   .then(function (data) {
     return s3.putObjectAsync({
@@ -77,10 +77,10 @@ function uploadFile (key, mode, file) {
 }
 
 function uploadCorrectFile (key, mode, res) {
-  if (mode === 'pdf')  return uploadFile(key + '.pdf',  'rendered.pdf')
-  if (mode === 'midi') return uploadFile(key + '.midi', 'rendered.midi')
+  if (mode === 'pdf')  return uploadFile(key + '.pdf', 'rendered.pdf')
 
-  return fs.accessAsync('rendered.png')
+  var midiPromise = uploadFile(key + '.midi', 'rendered.midi')
+  var pngPromise = (fs.accessAsync || fs.statAsync)('rendered.png')
   .then(function () {
     res.pages = 1
     return uploadFile(key + '-page1.png', 'rendered.png')
@@ -97,6 +97,8 @@ function uploadCorrectFile (key, mode, res) {
       return Promise.all(promises)
     })
   })
+
+  return Promise.join(midiPromise, pngPromise)
 }
 
 function countPages () {
