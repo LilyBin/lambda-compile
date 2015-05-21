@@ -68,6 +68,7 @@ function uploadFile (key, mode, file) {
       Bucket      : BUCKET
     , Key         : key
     , Body        : data
+    , ACL         : 'public-read'
     , ContentType : mime[mode]
     , Expiration  : new Date(new Date().valueOf() + 1800000) // 30 minutes
     , StorageClass: 'REDUCED_REDUNDANCY'
