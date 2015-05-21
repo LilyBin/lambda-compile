@@ -9,7 +9,8 @@ const BUCKET = 'lilypad-test'
 const LY_DIR = '/tmp/ly'
 
 process.chdir('/tmp')
-process.env['PATH'] += ':' + LY_DIR + '/bin'
+process.env['PATH'] += ':' + LY_DIR + '/usr/bin'
+process.env['LD_LIBRARY_PATH'] = LY_DIR + '/usr/lib'
 
 exports.handler = function(event, context) {
   console.log('Received event:', JSON.stringify(event, null, 2))
@@ -18,17 +19,14 @@ exports.handler = function(event, context) {
   makeTime('init', 'installation')
 
   return Promise.join(
-    exec(
-      "sh '" + __dirname + "/lilypond-2.18.2-1.linux-64.sh'" +
-      " --batch" +
-      " --prefix '" + LY_DIR + "'"
-    )
+    exec('sh ' + __dirname + '/install-lilypond.sh')
   , fs.writeFileAsync('input.ly', event.body)
   ).then(makeTime.bind(null, 'installation', 'lilypond'))
   .then(exec.bind(null, 'lilypond --formats=pdf,png -o rendered input.ly'))
   .then(function (res) {
     result = res
   }).then(makeTime.bind(null, 'lilypond', 'upload'))
+  // FIXME: MIME-type, PNG
   .then(uploadFile.bind(null, key, 'rendered.pdf'))
   .then(console.timeEnd.bind(console, 'upload'))
   .then(function () {
