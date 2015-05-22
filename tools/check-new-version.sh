@@ -8,7 +8,7 @@ unstable=`curl -s 'http://lilypond.org/development.html' | \
 stable_src=`echo $stable | cut -d'-' -f1`
 unstable_src=`echo $unstable | cut -d'-' -f1`
 
-cat <<EOF >version.json
+cat <<EOF >versions.json
 {
   "stable": "$stable_src"
 , "unstable": "$unstable_src"
