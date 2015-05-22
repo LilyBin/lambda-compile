@@ -32,3 +32,5 @@ if [ "$lilypad_version" ]; then
   echo
   mv lilypond-${version}.linux-64.tar lilypond-${lilypad_version}-linux-64.tar
 fi
+
+rm ${version}.sh

@@ -1,3 +1,5 @@
 #!/bin/sh
 
-aws s3 cp lilypond-*-linux-64.tar s3://lilypad-tarball/
+for f in lilypond-*.tar; do
+	aws s3 cp --storage-class REDUCED_REDUNDANCY $f s3://lilypad-tarball/
+done
