@@ -2,6 +2,10 @@
   "name": "lilypad-slave",
   "version": "1.0.0",
   "description": "Slave for LilyPad",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TimothyGu/lilypad-slave"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
