@@ -51,7 +51,9 @@ The workflow of this Lambda function is like this:
 Deployment
 ----------
 
-Some deployment helpers are available in `deploy/`:
+Some deployment helpers are available in `deploy/`. These contain some details
+about how my developement environment is set up so don't expect much out of
+it :)
 
 - `make-zipball.sh` makes a zipball of source files, as `code.zip`.
 - `create.sh` creates a new Lambda function with the generated zipball:
