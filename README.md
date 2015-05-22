@@ -76,7 +76,8 @@ LilyPond Tarball Generation
 In `tools/` there are some tools for checking and updating LilyPond tarballs.
 
 - `check-new-version.sh` checks for the latest version of stable and unstable
-  LilyPond builds.
+  LilyPond builds, output the release versions to versions.json, and prints
+  the distribution versions.
 - `make-tarball.sh` downloads a LilyPond binary and decompresses it to a vanilla
   `.tar` archive.
 
@@ -87,7 +88,9 @@ In `tools/` there are some tools for checking and updating LilyPond tarballs.
     tools/make-tarball.sh 2.18.2-1   stable
   # --> lilypond-stable.linux-64.tar
   ```
-- `upload-tarballs.sh` uploads all files matching `lilypond-*.tar` to S3.
+- `upload-tarballs.sh` uploads all files matching `lilypond-*.tar` to S3, and
+  `versions.json` if it exists.
+- `update.sh` combines all of the above.
 
 Local and Live Tests
 --------------------
