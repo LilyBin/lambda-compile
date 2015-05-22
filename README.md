@@ -1,6 +1,11 @@
 LilyBin Slave
 =============
 
+This will be used to power [LilyBin](http://lilybin.com), a pastebin for music
+based on [LilyPond](http://lilypond.org/). It is written for
+[AWS Lambda](https://aws.amazon.com/lambda/) to allow for an unmatched
+on-demand scalability.
+
 How This Works
 --------------
 
@@ -108,3 +113,5 @@ License
 Copyright © 2015 Tiancheng “Timothy” Gu.
 
 MIT licensed.
+
+See `LICENSE.md` for the full license text.
