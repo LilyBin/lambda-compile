@@ -58,7 +58,7 @@ function uploadFile (key, file, mode) {
     , ContentType : mime[mode]
     , StorageClass: 'REDUCED_REDUNDANCY'
     })
-  })
+  }, noop)                              // ignore error
 }
 
 function uploadFiles (key, res) {
@@ -91,3 +91,5 @@ function countPages () {
     return files.filter(re.test.bind(re)).length
   })
 }
+
+function noop () {}
