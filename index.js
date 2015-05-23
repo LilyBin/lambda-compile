@@ -5,7 +5,7 @@ var Promise = require('bluebird')
 var exec = require('./lib/exec')
 var fs = Promise.promisifyAll(require('fs'))
 var s3 = Promise.promisifyAll(new AWS.S3())
-const BUCKET = 'lilypad-lambda'
+const BUCKET = 'lilybin-lambda'
 const LY_DIR = '/tmp/ly'
 
 process.chdir('/tmp')

@@ -84,7 +84,7 @@ In `tools/` there are some tools for checking and updating LilyPond tarballs.
   ```sh
   #                                 recommended; renames the tarball
   #                                 to a form fit for uploading
-  # tools/make-tarball.sh <version> [<lilypad_version>]
+  # tools/make-tarball.sh <version> [<lilybin_version>]
     tools/make-tarball.sh 2.18.2-1   stable
   # --> lilypond-stable.linux-64.tar
   ```

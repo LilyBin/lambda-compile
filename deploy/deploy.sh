@@ -7,5 +7,5 @@ echo "$version" > version
 deploy/make-zipball.sh
 
 aws --profile admin lambda update-function-code \
-	--function-name "lilypad-$version" \
+	--function-name "lilybin-$version" \
 	--zip-file fileb://code.zip

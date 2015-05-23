@@ -3,7 +3,7 @@
 set -e
 
 version=$1
-lilypad_version=$2
+lilybin_version=$2
 
 if ! [ -e ${version}.sh ]; then
   echo
@@ -25,12 +25,12 @@ echo ">>> bunzip2 lilypond-${version}.linux-64.tar.bz2"
 echo
 bunzip2 lilypond-${version}.linux-64.tar.bz2
 
-if [ "$lilypad_version" ]; then
+if [ "$lilybin_version" ]; then
   echo
   echo '>>> renaming'
-  echo ">>> mv lilypond-${version}.linux-64.tar lilypond-${lilypad_version}-linux-64.tar"
+  echo ">>> mv lilypond-${version}.linux-64.tar lilypond-${lilybin_version}-linux-64.tar"
   echo
-  mv lilypond-${version}.linux-64.tar lilypond-${lilypad_version}-linux-64.tar
+  mv lilypond-${version}.linux-64.tar lilypond-${lilybin_version}-linux-64.tar
 fi
 
 rm ${version}.sh

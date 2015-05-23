@@ -1,10 +1,10 @@
 {
-  "name": "lilypad-slave",
+  "name": "lilybin-slave",
   "version": "1.0.0",
-  "description": "Slave for LilyPad",
+  "description": "Slave for LilyBin",
   "repository": {
     "type": "git",
-    "url": "git://github.com/TimothyGu/lilypad-slave"
+    "url": "git://github.com/TimothyGu/lilybin-slave"
   },
   "main": "index.js",
   "scripts": {

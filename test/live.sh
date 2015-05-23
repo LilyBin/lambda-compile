@@ -1,5 +1,5 @@
 #!/bin/sh
 
-func='lilypad-unstable'
+func='lilybin-unstable'
 
-aws lambda invoke --profile lilypad --invocation-type RequestResponse --function-name "$func" --region us-west-2 --log-type Tail --payload file://payload.json output.txt
+aws lambda invoke --profile lilybin --invocation-type RequestResponse --function-name "$func" --region us-west-2 --log-type Tail --payload file://payload.json output.txt
