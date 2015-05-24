@@ -7,7 +7,7 @@ version="`cat $DIR/version`"
 
 if test -d ly; then exit; fi
 
-curl -s -o lilypond.tar https://s3-us-west-2.amazonaws.com/lilybin-tarball/lilypond-$version-linux-64.tar
+curl -s -o lilypond.tar https://s3-us-west-2.amazonaws.com/lilybin-tarballs/lilypond-$version-linux-64.tar
 mkdir ly
 tar -C ly -xf lilypond.tar
 

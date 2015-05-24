@@ -28,7 +28,7 @@ The workflow of this Lambda function is like this:
     1.  Detects if `/tmp/ly` exists. If so, assume LilyPond is already
         installed, and skip to #4.
     2.  Downloads a decompressed tarball from an S3 bucket (for now
-        `s3://lilybin-tarball/`).
+        `s3://lilybin-tarballs/`).
     3.  Extracts it to `/tmp/ly`. `PATH` and `LD_LIBRARY_PATH` are modified.
     4.  The internal Ghostscript binary (`gs`) is monkey patched to avoid a
         weird error regarding Fontmaps.
