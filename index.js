@@ -30,7 +30,7 @@ exports.handler = function(event, context) {
   }).then(makeTime.bind(null, 'installation', 'lilypond'))
   .then(exec.bind(
     null,
-    'lilypond -dsafe --formats=pdf,png -o rendered input.ly'
+    'lilypond --formats=pdf,png -o rendered input.ly'
   ))
   .then(function (res) {
     this.result = res
