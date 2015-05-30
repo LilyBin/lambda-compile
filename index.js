@@ -6,11 +6,11 @@ var exec = require('./lib/exec')
 var fs = Promise.promisifyAll(require('fs'))
 var s3 = Promise.promisifyAll(new AWS.S3())
 const BUCKET = 'lilybin-scores'
-const LY_DIR = '/tmp/ly'
+const LY_DIR = process.env.LAMBDA_TASK_ROOT + '/ly'
 
 process.chdir('/tmp')
-process.env['PATH'] += ':' + LY_DIR + '/usr/bin'
-process.env['LD_LIBRARY_PATH'] = LY_DIR + '/usr/lib'
+process.env.PATH += ':' + LY_DIR + '/usr/bin'
+process.env.LD_LIBRARY_PATH = LY_DIR + '/usr/lib'
 
 var mime = {
   'pdf' : 'application/octet-stream'
@@ -20,14 +20,11 @@ var mime = {
 
 exports.handler = function(event, context) {
   console.log('Received event:', JSON.stringify(event, null, 2))
-  makeTime('init', 'installation')
+  makeTime('init', 'writing input')
 
-  return Promise.join(
-    exec('sh ' + __dirname + '/install-lilypond.sh')
-  , fs.writeFileAsync('input.ly', event.body)
-  ).bind({
+  return fs.writeFileAsync('input.ly', event.body).bind({
     key : event.key
-  }).then(makeTime.bind(null, 'installation', 'lilypond'))
+  }).then(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
     'lilypond --formats=pdf,png -o rendered input.ly'

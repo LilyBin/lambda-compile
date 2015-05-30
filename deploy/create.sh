@@ -8,7 +8,7 @@ if ! [ "$1" ]; then
 fi
 
 version=$1
-echo "$version" > version
+tools/update.sh $version
 deploy/make-zipball.sh
 
 aws --profile admin lambda create-function \

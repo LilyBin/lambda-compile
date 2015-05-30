@@ -3,7 +3,9 @@
 set -e
 
 version=$1
-lilybin_version=$2
+
+rm -rf ly
+mkdir ly
 
 if ! [ -e ${version}.sh ]; then
   echo
@@ -21,16 +23,16 @@ sh ${version}.sh --tarball --batch
 
 echo
 echo '>>> bunzipping'
-echo ">>> bunzip2 lilypond-${version}.linux-64.tar.bz2"
+echo ">>> tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly"
 echo
-bunzip2 lilypond-${version}.linux-64.tar.bz2
-
-if [ "$lilybin_version" ]; then
-  echo
-  echo '>>> renaming'
-  echo ">>> mv lilypond-${version}.linux-64.tar lilypond-${lilybin_version}-linux-64.tar"
-  echo
-  mv lilypond-${version}.linux-64.tar lilypond-${lilybin_version}-linux-64.tar
-fi
+tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly
 
 rm ${version}.sh
+
+# Try to fix the fontmap bug
+expandargs='"$@"'
+cp ly/usr/bin/gs ly/usr/bin/gs.orig
+cat <<EOF >ly/usr/bin/gs
+#!/bin/sh
+gs.orig -dNOFONTMAP $expandargs
+EOF
