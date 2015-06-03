@@ -13,8 +13,8 @@ process.env.PATH += ':' + LY_DIR + '/usr/bin'
 process.env.LD_LIBRARY_PATH = LY_DIR + '/usr/lib'
 
 var mime = {
-  'pdf' : 'application/octet-stream'
-, 'midi': 'application/octet-stream'
+  'pdf' : 'application/pdf'
+, 'midi': 'audio/midi'
 , 'png' : 'image/png'
 }
 
