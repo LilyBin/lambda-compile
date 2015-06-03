@@ -27,7 +27,7 @@ exports.handler = function(event, context) {
   }).then(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
-    'lilypond --formats=pdf,png -o rendered input.ly'
+    'lilypond --formats=pdf -o rendered input.ly'
   ))
   .then(function (res) {
     this.result = res
@@ -61,32 +61,8 @@ function uploadFile (key, file, mode) {
 function uploadFiles (key, res) {
   var pdfPromise = uploadFile(key + '.pdf', 'rendered.pdf', 'pdf')
   var midiPromise = uploadFile(key + '.midi', 'rendered.midi', 'midi')
-  var pngPromise = (fs.accessAsync || fs.statAsync)('rendered.png')
-    .then(function () {
-      res.pages = 1
-      return uploadFile(key + '-page1.png', 'rendered.png', 'png')
-    }, function () {
-      return countPages().then(function (pages) {
-        res.pages = pages
-        var promises = [];
 
-        for (var i = 1; i <= pages; i ++) {
-          promises.push(uploadFile(
-            key + '-page' + i + '.png', 'rendered-page' + i + '.png', 'png'
-          ))
-        }
-        return Promise.all(promises)
-      })
-    })
-
-  return Promise.join(pdfPromise, midiPromise, pngPromise)
-}
-
-function countPages () {
-  var re = new RegExp('rendered-page.*\.png')
-  return fs.readdirAsync('.').then(function (files) {
-    return files.filter(re.test.bind(re)).length
-  })
+  return Promise.join(pdfPromise, midiPromise)
 }
 
 function noop () {}
