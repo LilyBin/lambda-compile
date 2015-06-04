@@ -1,3 +1,4 @@
+process.env.LAMBDA_TASK_ROOT = __dirname + '/../'
 var context = {
   succeed: function (result) {
     console.log('Success!!!')
