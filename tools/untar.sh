@@ -29,7 +29,7 @@ echo ">>> tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly"
 echo
 tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly
 
-rm ${version}.sh
+rm -f ${version}.sh
 
 # Try to fix the fontmap bug
 expandargs='"$@"'
