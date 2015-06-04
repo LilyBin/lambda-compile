@@ -22,7 +22,11 @@ exports.handler = function(event, context) {
   console.log('Received event:', JSON.stringify(event, null, 2))
   makeTime('init', 'writing input')
 
-  return fs.writeFileAsync('input.ly', event.body).bind({
+  return Promise.join(
+    fs.writeFileAsync('input.ly', event.body),
+    fs.unlinkAsync('rendered.pdf').catch(noop),
+    fs.unlinkAsync('rendered.midi').catch(noop)
+  ).bind({
     key : event.key
   }).tap(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
@@ -70,3 +74,5 @@ function uploadFiles (key, res) {
     res.files = { pdf: pdf, midi: midi }
   })
 }
+
+function noop () {}
