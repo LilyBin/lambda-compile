@@ -7,19 +7,21 @@ version=$1
 rm -rf ly
 mkdir ly
 
-if ! [ -e ${version}.sh ]; then
-  echo
-  echo '>>> Downloading'
-  echo ">>> curl -o ${version}.sh http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-${version}.linux-64.sh"
-  echo
-  curl -o ${version}.sh http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-${version}.linux-64.sh
-fi
+if ! [ -e "lilypond-${version}.linux-64.tar.bz2" ]; then
+  if ! [ -e ${version}.sh ]; then
+    echo
+    echo '>>> Downloading'
+    echo ">>> curl -o ${version}.sh http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-${version}.linux-64.sh"
+    echo
+    curl -o ${version}.sh http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-${version}.linux-64.sh
+  fi
 
-echo
-echo '>>> Untarring'
-echo ">>> sh ${version}.sh --tarball --batch"
-echo
-sh ${version}.sh --tarball --batch
+  echo
+  echo '>>> Untarring'
+  echo ">>> sh ${version}.sh --tarball --batch"
+  echo
+  sh ${version}.sh --tarball --batch
+fi
 
 echo
 echo '>>> bunzipping'
