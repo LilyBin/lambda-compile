@@ -24,17 +24,17 @@ exports.handler = function(event, context) {
 
   return fs.writeFileAsync('input.ly', event.body).bind({
     key : event.key
-  }).then(makeTime.bind(null, 'writing input', 'lilypond'))
+  }).tap(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
     'lilypond --formats=pdf -o rendered input.ly'
   ))
   .then(function (res) {
     this.result = res
-  }).then(makeTime.bind(null, 'lilypond', 'upload'))
+  }).tap(makeTime.bind(null, 'lilypond', 'upload'))
   .then(function () {
     return uploadFiles(this.key, this.result)
-  }).then(console.timeEnd.bind(console, 'upload'))
+  }).tap(console.timeEnd.bind(console, 'upload'))
   .then(function () {
     context.succeed(this.result)
   }).catch(context.fail.bind(context))
