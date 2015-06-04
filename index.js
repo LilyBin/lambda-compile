@@ -55,14 +55,18 @@ function uploadFile (key, file, mode) {
     , ContentType : mime[mode]
     , StorageClass: 'REDUCED_REDUNDANCY'
     })
-  }, noop)                              // ignore error
+  }).then(function () {
+    return true
+  }).catch(function () {
+    return false
+  })
 }
 
 function uploadFiles (key, res) {
   var pdfPromise = uploadFile(key + '.pdf', 'rendered.pdf', 'pdf')
   var midiPromise = uploadFile(key + '.midi', 'rendered.midi', 'midi')
 
-  return Promise.join(pdfPromise, midiPromise)
+  return Promise.join(pdfPromise, midiPromise, function (pdf, midi) {
+    res.files = { pdf: pdf, midi: midi }
+  })
 }
-
-function noop () {}
