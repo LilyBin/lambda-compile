@@ -1,5 +1,5 @@
-LilyBin Slave
-=============
+LilyBin AWS Lambda Function
+===========================
 
 This will be used to power [LilyBin](http://lilybin.com), a pastebin for music
 based on [LilyPond](http://lilypond.org/). It is written for

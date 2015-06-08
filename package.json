@@ -1,10 +1,10 @@
 {
-  "name": "lilybin-slave",
+  "name": "lilybin-lambda-function",
   "version": "1.0.0",
-  "description": "Slave for LilyBin",
+  "description": "AWS Lambda function for LilyBin",
   "repository": {
     "type": "git",
-    "url": "git://github.com/TimothyGu/lilybin-slave"
+    "url": "https://github.com/LilyBin/lambda-function.git"
   },
   "main": "index.js",
   "scripts": {
