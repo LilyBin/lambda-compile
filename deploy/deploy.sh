@@ -11,6 +11,10 @@ version=$1
 tools/update.sh $version
 deploy/make-zipball.sh
 
-aws --profile admin lambda update-function-code \
-  --function-name "lilybin-$version" \
-  --zip-file fileb://code.zip
+#echo
+#echo '>>> Uploading'
+#echo ">>> aws --profile admin lambda update-function-code --function-name "lilybin-$version" --zip-file fileb://code.zip"
+#echo
+#aws --profile admin lambda update-function-code \
+#  --function-name "lilybin-$version" \
+#  --zip-file fileb://code.zip

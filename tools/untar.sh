@@ -24,7 +24,7 @@ if ! [ -e "lilypond-${version}.linux-64.tar.bz2" ]; then
 fi
 
 echo
-echo '>>> bunzipping'
+echo '>>> Bunzipping'
 echo ">>> tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly"
 echo
 tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly
@@ -32,6 +32,9 @@ tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly
 rm -f ${version}.sh
 
 # Try to fix the fontmap bug
+echo
+echo '>>> Patching Ghostscript'
+echo
 expandargs='"$@"'
 cp ly/usr/bin/gs ly/usr/bin/gs.orig
 cat <<EOF >ly/usr/bin/gs
