@@ -23,11 +23,11 @@ exports.handler = function(event, context) {
   makeTime('init', 'writing input')
 
   return Promise.join(
-    fs.writeFileAsync('input.ly', event.body),
+    fs.writeFileAsync('input.ly', event.code),
     fs.unlinkAsync('rendered.pdf').catch(noop),
     fs.unlinkAsync('rendered.midi').catch(noop)
   ).bind({
-    key : event.key
+    id: event.id
   }).tap(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
@@ -37,7 +37,7 @@ exports.handler = function(event, context) {
     this.result = res
   }).tap(makeTime.bind(null, 'lilypond', 'upload'))
   .then(function () {
-    return uploadFiles(this.key, this.result)
+    return uploadFiles(this.id, this.result)
   }).tap(console.timeEnd.bind(console, 'upload'))
   .then(function () {
     context.succeed(this.result)
@@ -49,12 +49,12 @@ function makeTime (end, begin) {
   console.time(begin)
 }
 
-function uploadFile (key, file, mode) {
+function uploadFile (id, file, mode) {
   return fs.readFileAsync(file)
   .then(function (data) {
     return s3.putObjectAsync({
       Bucket      : BUCKET
-    , Key         : key
+    , Key         : id
     , Body        : data
     , ContentType : mime[mode]
     , StorageClass: 'REDUCED_REDUNDANCY'
@@ -66,9 +66,9 @@ function uploadFile (key, file, mode) {
   })
 }
 
-function uploadFiles (key, res) {
-  var pdfPromise = uploadFile(key + '.pdf', 'rendered.pdf', 'pdf')
-  var midiPromise = uploadFile(key + '.midi', 'rendered.midi', 'midi')
+function uploadFiles (id, res) {
+  var pdfPromise = uploadFile(id + '.pdf', 'rendered.pdf', 'pdf')
+  var midiPromise = uploadFile(id + '.midi', 'rendered.midi', 'midi')
 
   return Promise.join(pdfPromise, midiPromise, function (pdf, midi) {
     res.files = { pdf: pdf, midi: midi }
