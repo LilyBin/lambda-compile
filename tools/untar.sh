@@ -41,3 +41,16 @@ cat <<EOF >ly/usr/bin/gs
 #!/bin/sh
 gs.orig -dNOFONTMAP $expandargs
 EOF
+
+# Copy fonts
+echo
+echo '>>> Copying fonts'
+find fonts -iname '*.otf' -exec cp {} ly/usr/share/lilypond/current/fonts/otf/ \;
+# We only ever produce PDF output, but in case we need SVG fonts at some point:
+# find fonts -iname '*.woff' -o -iname '*.svg' -exec cp {} ly/usr/share/lilypond/current/fonts/svg/ \;
+
+# See http://fonts.openlilylib.org/docs.html#patch-install
+if [[ $version == 2.18.* ]]; then
+  echo '>>> Version 2.18.* needs font.scm patch'
+  cp fonts/font.scm ly/usr/share/lilypond/current/scm/font.scm
+fi

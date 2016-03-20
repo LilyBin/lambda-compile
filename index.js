@@ -31,7 +31,7 @@ exports.handler = function(event, context) {
   }).tap(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
-    'lilypond --formats=pdf -o rendered input.ly >&2'
+    'lilypond --formats=pdf --include="' + __dirname+'/fonts/font-stylesheets' + '" -o rendered input.ly >&2'
   ))
   .then(function (res) {
     this.result = res
