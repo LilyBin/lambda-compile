@@ -1,4 +1,4 @@
 {
-  "body": "% LilyBin\n\\score{\n\t{\n\t\t\\repeat unfold 120 { c4. d e f }\n\t}\n\n\t\\layout{}\n\t\\midi{}\n}\n"
-, "key": "test5"
+  "code": "% LilyBin\n\\score{\n\t{\n\t\t\\repeat unfold 120 { c4. d e f }\n\t}\n\n\t\\layout{}\n\t\\midi{}\n}\n"
+, "id": "test5"
 }

@@ -18,8 +18,8 @@ The workflow of this Lambda function is like this:
 
     ```json
     {
-      "body": "this is the LilyPond source",
-      "key" : "this is the ID of the source"
+      "code": "this is the LilyPond source",
+      "id"  : "this is the ID of the source"
     }
     ```
 2.  `cd` to `/tmp`, the only writable storage.

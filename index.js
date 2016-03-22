@@ -20,6 +20,11 @@ var mime = {
 
 exports.handler = function(event, context) {
   console.log('Received event:', JSON.stringify(event, null, 2))
+  var time = process.hrtime()
+  var id = event.id ||
+    [Date.now(), time[0], time[1], Math.random().toString(36).substr(2)]
+      .join('-')
+
   makeTime('init', 'writing input')
 
   return Promise.join(
@@ -27,7 +32,7 @@ exports.handler = function(event, context) {
     fs.unlinkAsync('rendered.pdf').catch(noop),
     fs.unlinkAsync('rendered.midi').catch(noop)
   ).bind({
-    id: event.id
+    id: id,
   }).tap(makeTime.bind(null, 'writing input', 'lilypond'))
   .then(exec.bind(
     null,
@@ -40,8 +45,12 @@ exports.handler = function(event, context) {
     return uploadFiles(this.id, this.result)
   }).tap(console.timeEnd.bind(console, 'upload'))
   .then(function () {
+    this.result.id = this.id
     context.succeed(this.result)
-  }).catch(context.fail.bind(context))
+  }).catch(function (err) {
+    console.error('FAILING')
+    context.fail(err)
+  })
 }
 
 function makeTime (end, begin) {
