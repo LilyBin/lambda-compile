@@ -8,4 +8,4 @@ echo '>>> Zipping'
 echo ">>> zip --exclude node_modules/aws-sdk/\* -r code.zip index.js ly version lib node_modules"
 echo
 # aws-sdk is already available in the container
-zip -9 --exclude node_modules/aws-sdk/\* -r code.zip index.js ly version lib node_modules
+zip -9 --exclude node_modules/aws-sdk/\* -r code.zip index.js ly version lib node_modules fonts/font-stylesheets
