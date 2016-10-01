@@ -1,5 +1,6 @@
-code.zip
 node_modules
-output.txt
-tools/2.*.sh
-tools/*.tar
+deploy-*
+lib
+lilypond-*.tar.*
+proddeps
+versions.json

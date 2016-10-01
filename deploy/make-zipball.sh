@@ -2,10 +2,38 @@
 
 set -e
 
+version=$1
+root=$2
+
+echo
+echo '>>> Building JavaScript with Babel'
+echo '>>> npm run build'
+echo
+npm run build
+
+echo
+echo '>>> Install production dependencies'
+echo '>>> mkdir -p proddeps'
+mkdir -p proddeps
+
+echo '>>> cp package.json proddeps'
+cp package.json proddeps
+
+echo '>>> cd proddeps && npm i --production'
+(cd proddeps && npm i --production)
+
+echo
+
+echo
+echo '>>> Copy files to deployment directory'
+echo
+cp -a index.js lib proddeps/node_modules $root
+mkdir $root/fonts
+cp -a fonts/font-stylesheets $root/fonts
+
 rm -f code.zip
 echo
 echo '>>> Zipping'
-echo ">>> zip --exclude node_modules/aws-sdk/\* -r code.zip index.js ly version lib node_modules"
+echo ">>> cd $root && zip -r ../deploy-$version.zip *"
 echo
-# aws-sdk is already available in the container
-zip -9 --exclude node_modules/aws-sdk/\* -r code.zip index.js ly version lib node_modules fonts/font-stylesheets
+(cd $root && zip -9 -r ../deploy-$version.zip *)

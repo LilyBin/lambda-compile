@@ -3,9 +3,12 @@
 set -e
 
 version=$1
+output=$2
 
-rm -rf ly
-mkdir ly
+: ${output:=ly}
+
+rm -rf $output
+mkdir $output
 
 if ! [ -e "lilypond-${version}.linux-64.tar.bz2" ]; then
   if ! [ -e ${version}.sh ]; then
@@ -25,9 +28,9 @@ fi
 
 echo
 echo '>>> Bunzipping'
-echo ">>> tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly"
+echo ">>> tar -xjf lilypond-${version}.linux-64.tar.bz2 -C $output"
 echo
-tar -xjf lilypond-${version}.linux-64.tar.bz2 -C ly
+tar -xjf lilypond-${version}.linux-64.tar.bz2 -C "$output"
 
 rm -f ${version}.sh
 
@@ -36,8 +39,8 @@ echo
 echo '>>> Patching Ghostscript'
 echo
 expandargs='"$@"'
-cp ly/usr/bin/gs ly/usr/bin/gs.orig
-cat <<EOF >ly/usr/bin/gs
+cp $output/usr/bin/gs $output/usr/bin/gs.orig
+cat <<EOF >$output/usr/bin/gs
 #!/bin/sh
 gs.orig -dNOFONTMAP $expandargs
 EOF
@@ -45,12 +48,12 @@ EOF
 # Copy fonts
 echo
 echo '>>> Copying fonts'
-find fonts -iname '*.otf' -exec cp {} ly/usr/share/lilypond/current/fonts/otf/ \;
+find fonts -iname '*.otf' -exec cp {} $output/usr/share/lilypond/current/fonts/otf/ \;
 # We only ever produce PDF output, but in case we need SVG fonts at some point:
-# find fonts -iname '*.woff' -o -iname '*.svg' -exec cp {} ly/usr/share/lilypond/current/fonts/svg/ \;
+# find fonts -iname '*.woff' -o -iname '*.svg' -exec cp {} $output/usr/share/lilypond/current/fonts/svg/ \;
 
 # See http://fonts.openlilylib.org/docs.html#patch-install
-if [[ $version == 2.18.* ]]; then
+if expr "x$version" : "x2\\.18\\..*" >/dev/null; then
   echo '>>> Version 2.18.* needs font.scm patch'
-  cp fonts/font.scm ly/usr/share/lilypond/current/scm/font.scm
+  cp fonts/font.scm $output/usr/share/lilypond/current/scm/font.scm
 fi

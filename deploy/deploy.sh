@@ -8,13 +8,16 @@ if ! [ "$1" ]; then
 fi
 
 version=$1
-tools/update.sh $version
-deploy/make-zipball.sh
+root=deploy-$version
+rm -rf $root
+mkdir $root
+tools/update.sh $version $root/ly
+deploy/make-zipball.sh $version $root
 
 echo
 echo '>>> Uploading'
-echo ">>> aws --profile admin lambda update-function-code --function-name "lilybin-$version" --zip-file fileb://code.zip"
+echo ">>> aws --profile admin lambda update-function-code --function-name "lilybin-$version" --zip-file fileb://deploy-$version.zip"
 echo
 aws --profile admin lambda update-function-code \
   --function-name "lilybin-$version" \
-  --zip-file fileb://code.zip
+  --zip-file fileb://deploy-$version.zip
