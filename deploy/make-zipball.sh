@@ -34,6 +34,6 @@ cp -a fonts/font-stylesheets $root/fonts
 rm -f code.zip
 echo
 echo '>>> Zipping'
-echo ">>> cd $root && zip -r ../deploy-$version.zip *"
+echo ">>> cd $root && zip -r9 --symlink ../deploy-$version.zip *"
 echo
-(cd $root && zip -9 -r ../deploy-$version.zip *)
+(cd $root && zip -r9 --symlink ../deploy-$version.zip *)
