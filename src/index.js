@@ -1,11 +1,14 @@
 import AWS from 'aws-sdk';
-import { promisifyAll } from 'bluebird';
+import Promise, { promisifyAll } from 'bluebird';
 import exec from './exec';
 
-startTimer('init');
+console.time('init');
 
 const fs = promisifyAll(require('fs'));
-const s3 = promisifyAll(new AWS.S3());
+
+AWS.config.setPromisesDependency(Promise);
+const s3 = new AWS.S3();
+
 const BUCKET = 'lilybin-scores';
 const LY_DIR = `${process.env.LAMBDA_TASK_ROOT}/ly`;
 const mime = {
@@ -15,18 +18,11 @@ const mime = {
 };
 
 process.chdir('/tmp');
+
 process.env.PATH += `:${LY_DIR}/usr/bin`;
 process.env.LD_LIBRARY_PATH = `${LY_DIR}/usr/lib`;
 
-function noop () {}
-
-// Make sure this declaration is hoisted
-var curTimer = null;
-function startTimer(label) {
-  if (curTimer) console.timeEnd(curTimer);
-  if (label) console.time(label);
-  curTimer = label;
-}
+console.timeEnd('init');
 
 function generateId() {
   return [
@@ -40,53 +36,56 @@ function runLilypond() {
   return exec(`lilypond --formats=pdf --include="${__dirname}/fonts/font-stylesheets" -o rendered input.ly >&2`);
 }
 
-async function uploadFile(id, file, mode) {
-  try {
-    await s3.putObjectAsync({
+function uploadFile(id, file, mode) {
+  return fs.readFileAsync(file).then(body_ => 
+    s3.putObject({
       Bucket: BUCKET,
       Key: id,
-      Body: await fs.readFileAsync(file),
+      Body: body_,
       ContentType: mime[mode],
       StorageClass: 'REDUCED_REDUNDANCY'
-    });
-    return true;
-  } catch (err) {
-    return false;
-  }
+    }).promise()
+  ).thenReturn(true).catchReturn(false);
 }
 
-async function uploadFiles(id, result) {
-  result.files = {
-    pdf: await uploadFile(`${id}.pdf`, 'rendered.pdf', 'pdf'),
-    midi: await uploadFile(`${id}.midi`, 'rendered.midi', 'midi')
-  };
-
-  return result;
+function uploadFiles(result) {
+  return Promise.all([
+    uploadFile(`${result.id}.pdf`, 'rendered.pdf', 'pdf'),
+    uploadFile(`${result.id}.midi`, 'rendered.midi', 'midi')
+  ]).spread((pdf_, midi_) => {
+    result.files = {
+      pdf: pdf_,
+      midi: midi_
+    };
+    return result;
+  });
 }
 
-async function run(event) {
+function run(event) {
   console.log('Received event:', JSON.stringify(event, null, 2));
   const id = event.id || generateId();
 
-  startTimer('writing input');
-  await Promise.all([
+  console.time('writing input');
+
+  return Promise.all([
     fs.writeFileAsync('input.ly', event.code),
-    fs.unlinkAsync('rendered.pdf').catch(noop),
-    fs.unlinkAsync('rendered.midi').catch(noop)
-  ]);
-
-  startTimer('lilypond');
-  let result = await runLilypond();
-  result.id = id;
-
-  startTimer('upload');
-  result = await uploadFiles(id, result);
-
-  startTimer(null);
-  return result;
+    fs.unlinkAsync('rendered.pdf').catchReturn(null),
+    fs.unlinkAsync('rendered.midi').catchReturn(null)
+  ]).tap(() => {
+    console.timeEnd('writing input');
+    console.time('lilypond');
+  }).return(
+    runLilypond()
+  ).then(result => {
+    result.id = id;
+    return result;
+  }).tap(() => {
+    console.timeEnd('lilypond');
+    console.time('upload');
+  }).then(uploadFiles).tap(() => console.timeEnd('upload'));
 }
 
-exports.handler = function (event, context, callback) {
+exports.handler = (event, context, callback) => {
   run(event)
   .then(res => callback(null, res))
   .catch(err => {
